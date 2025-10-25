@@ -1,6 +1,6 @@
 import sqlite3
 from pathlib import Path
-from . import config
+from app import config
 
 # ensure data directory exists
 Path(config.DB_PATH).parent.mkdir(parents=True, exist_ok=True)
