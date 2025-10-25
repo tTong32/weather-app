@@ -18,18 +18,17 @@ def read_all_records():
     conn.close()
     return [dict(row) for row in rows]
 
-def update_record(record_id, location=None, start_date=None, end_date=None):
+def update_record(record_id, location=None, start_date=None, end_date=None, weather_json=None):
     conn = get_connection()
     cursor = conn.cursor()
-    # simple update logic
     cursor.execute("""
         UPDATE weather_records
         SET location = COALESCE(?, location),
             start_date = COALESCE(?, start_date),
-            end_date = COALESCE(?, end_date)
+            end_date = COALESCE(?, end_date),
+            weather_json = COALESCE(?, weather_json)
         WHERE id = ?
-    """, (location, start_date, end_date, record_id))
-    conn.commit()
+    """, (location, start_date, end_date, weather_json, record_id))
     conn.close()
 
 def delete_record(record_id):
@@ -38,3 +37,13 @@ def delete_record(record_id):
     cursor.execute("DELETE FROM weather_records WHERE id = ?", (record_id,))
     conn.commit()
     conn.close()
+
+def return_record(record_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM weather_records WHERE id = ?", (record_id,))
+    row = cursor.fetchone()
+    conn.close()
+    if row is None:
+        return None
+    return dict(row)

@@ -20,7 +20,7 @@ def get_mode(values):
     return max(counts, key=counts.get)
 
 @router.get("/forecast", summary="Get 5-day forecast for a location")
-def get_forecast(location: str = Query(..., description="City name, postal code, or 'lat,lon'")):
+def get_forecast(location: str = Query(..., description="City name, postal code, landmark, or 'lat,lon' coordinates")):
     """
     Example: /api/weather/forecast?location=Toronto
     """

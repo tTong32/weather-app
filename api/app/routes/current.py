@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 router = APIRouter()
 
 @router.get("/current", summary="Get current weather for a location")
-def get_current(location: str = Query(..., description="City name, postal code, or 'lat,lon'")):
+def get_current(location: str = Query(..., description="City name, postal code, landmark, or 'lat,lon' coordinates")):
     """
     Example: /api/weather/current?location=Toronto
     """

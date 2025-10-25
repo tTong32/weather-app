@@ -2,10 +2,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-# routers
 from app.routes.current import router as current_router
 from app.routes.forecast import router as forecast_router
-# db init
+from app.routes.history import router as history_router
+
 from app.repository.db import init_db
 
 app = FastAPI(title="Weather App API")
@@ -23,6 +23,7 @@ init_db()
 
 app.include_router(current_router, prefix="/api/weather")
 app.include_router(forecast_router, prefix="/api/weather")
+app.include_router(history_router, prefix="/api/weather")
 
 
 @app.get("/")

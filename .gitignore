@@ -5,7 +5,6 @@ __pycache__/
 *.egg
 .venv/
 .env
-.env.*
 /python-api/.venv/
 /python-api/.env
 
@@ -13,7 +12,6 @@ __pycache__/
 frontend/node_modules/
 frontend/build/
 frontend/.env
-frontend/.env.*
 
 # --- OS / Editor ---
 .DS_Store
