@@ -1,0 +1,27 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+.venv/
+.env
+.env.*
+/python-api/.venv/
+/python-api/.env
+
+# --- Node / React ---
+frontend/node_modules/
+frontend/build/
+frontend/.env
+frontend/.env.*
+
+# --- OS / Editor ---
+.DS_Store
+*.log
+.vscode/
+.idea/
+
+# --- SQLite ---
+data/*.db
+*.sqlite
+*.sqlite3
