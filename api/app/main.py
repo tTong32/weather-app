@@ -21,7 +21,7 @@ app = FastAPI(title="Weather App API")
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"(http://localhost:?.*|https://.*\.railway\.app|https://.*\.vercel\.app|https://.*\.netlify\.app)",
+    allow_origin_regex=r"(http://localhost:?.*|https://.*\.railway\.app|https://.*\.vercel\.app|https://.*\.netlify\.app|https://.*\.onrender\.com)",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
