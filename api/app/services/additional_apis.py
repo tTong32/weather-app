@@ -3,11 +3,10 @@ import os
 from typing import Optional, Dict, Any
 
 class AdditionalAPIService:
-    """Service for integrating additional APIs like YouTube and Google Maps"""
+    """Service for integrating Youtube API"""
     
     def __init__(self):
         self.youtube_api_key = os.getenv('YOUTUBE_API_KEY', '')
-        self.google_maps_api_key = os.getenv('GOOGLE_MAPS_API_KEY', '')
     
     def get_location_videos(self, location: str, max_results: int = 5) -> Dict[str, Any]:
         """
