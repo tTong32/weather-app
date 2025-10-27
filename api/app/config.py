@@ -1,7 +1,8 @@
 import os
-from dotenv import load_dotenv
+from pathlib import Path
 
-load_dotenv()  # loads .env file in root
-
-OWM_KEY = os.getenv("OWM_KEY")
+# Database path
 DB_PATH = os.path.join(os.path.dirname(__file__), "../data/weather.db")
+
+# Ensure data directory exists
+Path(DB_PATH).parent.mkdir(parents=True, exist_ok=True)

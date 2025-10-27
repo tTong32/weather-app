@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Query, HTTPException, Path
 from pydantic import BaseModel, validator
-from datetime import datetime
+from datetime import datetime, date
 import json
 
 from app.repository import weather_repo
 from app.services import weather_service
-from app.services.weather_service import fetch_historical_weather
+from app.services.weather_service import fetch_historical_weather, geocode_location
 
 router = APIRouter()
 
@@ -14,39 +14,86 @@ class CreateWeatherRequest(BaseModel):
     start_date: str
     end_date: str
     
+    @validator('location')
+    def validate_location(cls, v):
+        if not v or not v.strip():
+            raise ValueError('Location cannot be empty')
+        if len(v.strip()) < 2:
+            raise ValueError('Location must be at least 2 characters long')
+        return v.strip()
+    
+    @validator('start_date', 'end_date')
+    def validate_date_format(cls, v):
+        try:
+            datetime.strptime(v, '%Y-%m-%d')
+        except ValueError:
+            raise ValueError('Date must be in YYYY-MM-DD format')
+        return v
+    
+    @validator('end_date')
+    def validate_date_range(cls, v, values):
+        if 'start_date' in values:
+            start_date = datetime.strptime(values['start_date'], '%Y-%m-%d').date()
+            end_date = datetime.strptime(v, '%Y-%m-%d').date()
+            
+            if end_date < start_date:
+                raise ValueError('End date must be after start date')
+            
+            # Check if date range is not too far in the past (Open-Meteo limitation)
+            today = date.today()
+            if start_date < date(1940, 1, 1):
+                raise ValueError('Start date cannot be before 1940-01-01')
+            
+            # Check if date range is not too far in the future
+            if start_date > today:
+                raise ValueError('Start date cannot be in the future')
+            
+            # Check if date range is not too long (max 1 year)
+            if (end_date - start_date).days > 365:
+                raise ValueError('Date range cannot exceed 1 year')
+        
+        return v
+
 class UpdateWeatherRequest(BaseModel):
     location: str = None
     start_date: str = None
     end_date: str = None
+    
+    @validator('location')
+    def validate_location(cls, v):
+        if v is not None:
+            if not v or not v.strip():
+                raise ValueError('Location cannot be empty')
+            if len(v.strip()) < 2:
+                raise ValueError('Location must be at least 2 characters long')
+            return v.strip()
+        return v
+    
+    @validator('start_date', 'end_date')
+    def validate_date_format(cls, v):
+        if v is not None:
+            try:
+                datetime.strptime(v, '%Y-%m-%d')
+            except ValueError:
+                raise ValueError('Date must be in YYYY-MM-DD format')
+        return v
 
 def get_coordinates(location):
     """
     Convert location string to lat/lon coordinates.
     Handles coordinates (43.65,-79.38) or city names (Toronto).
     """
-    if ',' in location:
-        try:
-            lat, lon = [coord.strip() for coord in location.split(',')]
-            lat = float(lat)
-            lon = float(lon)
-            return lat, lon
-        except (ValueError, IndexError):
-            pass
     try:
-        weather_data = weather_service.fetch_current_weather(location)
-        lat = weather_data['coord']['lat']
-        lon = weather_data['coord']['lon']
-        return lat, lon
+        return geocode_location(location)
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Invalid location: {str(e)}")
 
 @router.post("/history", summary="Create a new weather record")
 def create_record(request: CreateWeatherRequest):
-    # TODO: add location and time validation
     try:
         latitude, longitude = get_coordinates(request.location)
-        print(f"Latitude: {latitude}, Longitude: {longitude}")
         data = fetch_historical_weather(longitude, latitude, request.start_date, request.end_date)
+        
         if data:
             weather_json = json.dumps(data)
             weather_repo.create_record(request.location, request.start_date, request.end_date, weather_json)

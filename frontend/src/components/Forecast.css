@@ -1,0 +1,153 @@
+.forecast {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.forecast h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.search-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  align-items: flex-start;
+}
+
+.search-input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #0A6EBD;
+}
+
+.search-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  background: #0A6EBD;
+  color: white;
+  transition: background 0.3s ease;
+}
+
+.search-btn:hover:not(:disabled) {
+  background: #085a9d;
+}
+
+.search-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #0A6EBD;
+}
+
+.error {
+  background: #fee;
+  color: #c33;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.forecast-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.forecast-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.forecast-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.forecast-date {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.forecast-icon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.forecast-condition {
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 1rem;
+  text-transform: capitalize;
+}
+
+.forecast-temps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.temp-max {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #0A6EBD;
+}
+
+.temp-avg {
+  font-size: 1.4rem;
+  color: #666;
+  font-weight: 600;
+}
+
+.temp-min {
+  font-size: 1.3rem;
+  color: #888;
+}
+
+.forecast-details {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.detail-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.detail-icon {
+  font-size: 1.2rem;
+}

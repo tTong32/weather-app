@@ -2,7 +2,7 @@ from fastapi import APIRouter, Query, HTTPException
 from typing import Optional
 
 from app.services import weather_service
-from app.repository import weather_repo # optional later for saving
+from app.repository import weather_repo
 
 import traceback
 from datetime import datetime, timezone
@@ -13,22 +13,13 @@ router = APIRouter()
 def get_current(location: str = Query(..., description="City name, postal code, landmark, or 'lat,lon' coordinates")):
     """
     Example: /api/weather/current?location=Toronto
+    Returns current weather with hourly data from Open-Meteo
     """
     try:
         data = weather_service.fetch_current_weather(location)
-
-        weather = {
-            "location": f"{data.get('name', '')}, {data.get('sys', {}).get('country', '')}".strip(", "),
-            "temperature": data.get("main", {}).get("temp"),
-            "feels_like": data.get("main", {}).get("feels_like"),
-            "humidity": data.get("main", {}).get("humidity"),
-            "wind_speed": data.get("wind", {}).get("speed"),
-            "condition": (data.get("weather") or [{}])[0].get("description", "").title(),
-            "icon": (data.get("weather") or [{}])[0].get("icon"),
-            "timestamp": datetime.fromtimestamp(data.get("dt", 0), tz=timezone.utc).isoformat().replace("+00:00", "Z")
-        }
-
-        return {"status": "success", "data": weather}
+        
+        # Return the data directly as it's already properly formatted
+        return {"status": "success", "data": data}
 
     except Exception as exc:
         traceback.print_exc()
