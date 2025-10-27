@@ -124,7 +124,7 @@ function CurrentWeather() {
 
           {weather.hourly_temperature && weather.hourly_temperature.length > 0 && (
             <div className="hourly-section">
-              <h4>Hourly Data (Next 24 Hours)</h4>
+              <h4>Hourly Data (Today)</h4>
               <div className="hourly-grid">
                 <div className="hourly-chart">
                   <h5>Temperature (°C)</h5>
