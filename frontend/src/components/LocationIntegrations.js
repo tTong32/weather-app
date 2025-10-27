@@ -25,9 +25,12 @@ function LocationIntegrations({ location }) {
     }
   };
 
-  // Load integrations automatically when component mounts
+  // Load integrations automatically when location changes
   useEffect(() => {
-    if (location && !integrations && !loading) {
+    if (location && !loading) {
+      // Clear previous integrations and load new ones
+      setIntegrations(null);
+      setError(null);
       handleLoadIntegrations();
     }
   }, [location]);
@@ -45,43 +48,15 @@ function LocationIntegrations({ location }) {
         onClick={handleToggleExpanded}
         disabled={loading}
       >
-        {loading ? 'Loading...' : (isExpanded ? '▼ 🔗 Location Info & Media' : '▶ 🔗 Location Info & Media')}
+        {loading ? 'Loading...' : (isExpanded ? '▼ Related Videos' : '▶ Related Videos')}
       </button>
       
       {error && <div className="error">{error}</div>}
       
       {isExpanded && (integrations || loading) && (
         <div className="integrations-content">
-          {loading && !integrations && <p>Loading location information...</p>}
+          {loading && !integrations && <p>Loading related videos...</p>}
           
-          {/* Google Maps Integration */}
-          {integrations && integrations.google_maps && (
-            <div className="integration-section">
-              <h4>Location Details</h4>
-              {integrations.google_maps.success ? (
-                <div className="map-info">
-                  <div className="map-details">
-                    <p><strong>Address:</strong> {integrations.google_maps.map_info.formatted_address}</p>
-                    <p><strong>Coordinates:</strong> {integrations.google_maps.map_info.latitude.toFixed(4)}, {integrations.google_maps.map_info.longitude.toFixed(4)}</p>
-                    {integrations.google_maps.map_info.place_info.rating > 0 && (
-                      <p><strong>Rating:</strong> ⭐ {integrations.google_maps.map_info.place_info.rating}/5 ({integrations.google_maps.map_info.place_info.user_ratings_total} reviews)</p>
-                    )}
-                  </div>
-                  <a 
-                    href={integrations.google_maps.map_info.google_maps_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="map-link"
-                  >
-                    🗺️ View on Google Maps
-                  </a>
-                </div>
-              ) : (
-                <p className="api-error">{integrations.google_maps.message}</p>
-              )}
-            </div>
-          )}
-
           {/* YouTube Integration */}
           {integrations && integrations.youtube && (
             <div className="integration-section">

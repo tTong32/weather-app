@@ -47,7 +47,7 @@ function PMAInfo() {
                     rel="noopener noreferrer"
                     className="pma-link"
                   >
-                    🔗 Visit our LinkedIn
+                    🔗 Visit LinkedIn Page
                   </a>
                 </div>
               </div>

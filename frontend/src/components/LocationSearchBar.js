@@ -69,22 +69,39 @@ function LocationSearchBar({ onLocationSelect, placeholder = "Search for a locat
     setShowSuggestions(false);
     setSuggestions([]);
     setError(null); // Clear any existing errors
+    setSelectedIndex(-1); // Reset selection
+    
+    // Call the parent callback
     onLocationSelect(suggestion.search_query);
     
-    // Reset selecting flag after a longer delay to prevent search from running
+    // Reset selecting flag after a delay to prevent search from running
     setTimeout(() => {
       setIsSelecting(false);
-    }, 500);
+    }, 1000); // Increased delay to ensure smooth transition
   };
 
   // Handle keyboard navigation
   const handleKeyDown = (e) => {
-    if (!showSuggestions || suggestions.length === 0) {
-      if (e.key === 'Enter') {
-        // If no suggestions, try to use the query as-is
-        onLocationSelect(query);
-        setShowSuggestions(false);
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      
+      // Only allow Enter if there are suggestions and one is selected
+      if (showSuggestions && suggestions.length > 0) {
+        if (selectedIndex >= 0 && selectedIndex < suggestions.length) {
+          handleSuggestionSelect(suggestions[selectedIndex]);
+        } else {
+          // If no suggestion is selected, select the first one
+          handleSuggestionSelect(suggestions[0]);
+        }
+      } else {
+        // If no suggestions are available, don't do anything
+        // This prevents the error when trying to use display names as coordinates
+        return;
       }
+      return;
+    }
+
+    if (!showSuggestions || suggestions.length === 0) {
       return;
     }
 
@@ -98,15 +115,6 @@ function LocationSearchBar({ onLocationSelect, placeholder = "Search for a locat
       case 'ArrowUp':
         e.preventDefault();
         setSelectedIndex(prev => prev > 0 ? prev - 1 : -1);
-        break;
-      case 'Enter':
-        e.preventDefault();
-        if (selectedIndex >= 0 && selectedIndex < suggestions.length) {
-          handleSuggestionSelect(suggestions[selectedIndex]);
-        } else {
-          onLocationSelect(query);
-          setShowSuggestions(false);
-        }
         break;
       case 'Escape':
         setShowSuggestions(false);
@@ -222,7 +230,7 @@ function LocationSearchBar({ onLocationSelect, placeholder = "Search for a locat
         </div>
       )}
 
-      {showSuggestions && suggestions.length === 0 && query.length >= 2 && !isLoading && (
+      {showSuggestions && suggestions.length === 0 && query.length >= 2 && !isLoading && !isSelecting && (
         <div className="suggestions-dropdown">
           <div className="no-suggestions">
             <div className="no-suggestions-icon">📍</div>

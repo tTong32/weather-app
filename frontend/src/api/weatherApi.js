@@ -92,15 +92,6 @@ export const getLocationVideos = async (location, maxResults = 5) => {
   return response.data;
 };
 
-export const getLocationMapInfo = async (location) => {
-  const response = await api.get(`/api/location/map-info?location=${encodeURIComponent(location)}`);
-  return response.data;
-};
-
-export const getLocationNews = async (location, maxResults = 5) => {
-  const response = await api.get(`/api/location/news?location=${encodeURIComponent(location)}&max_results=${maxResults}`);
-  return response.data;
-};
 
 export const getLocationIntegrations = async (location) => {
   const response = await api.get(`/api/location/integrations?location=${encodeURIComponent(location)}`);
