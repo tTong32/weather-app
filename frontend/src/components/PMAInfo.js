@@ -18,7 +18,7 @@ function PMAInfo() {
         <div className="pma-info-modal">
           <div className="pma-info-content">
             <div className="pma-info-header">
-              <h3>Weather App by Tom</h3>
+              <h3>Weather App by Thomson</h3>
               <button 
                 className="pma-info-close" 
                 onClick={() => setIsOpen(false)}

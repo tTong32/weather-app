@@ -21,7 +21,7 @@ app = FastAPI(title="Weather App API")
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"http://localhost:?.*",
+    allow_origin_regex=r"(http://localhost:?.*|https://.*\.railway\.app|https://.*\.vercel\.app|https://.*\.netlify\.app)",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -43,4 +43,5 @@ def root():
 
 
 if __name__ == "__main__":
-    uvicorn.run("app.main:app", host="127.0.0.1", port=8000, reload=True)
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=True)
